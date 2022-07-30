@@ -9,6 +9,7 @@ import "./customBlocks";
 import { toolbox } from "./toolbox";
 import { JSONGenerator } from "./generator";
 
+// @ts-ignore
 Blockly.setLocale(locale);
 
 interface BlocklyComponentProps extends Partial<Blockly.Options> {
