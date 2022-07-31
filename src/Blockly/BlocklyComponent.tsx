@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useEffect, useRef } from "react";
-
 import Blockly from "blockly/core";
 import locale from "blockly/msg/en";
-import "blockly/blocks";
+
+import categories from "../Blockly/customBlocks";
 import "./generator";
-import "./customBlocks";
-import { toolbox } from "./toolbox";
 import { JSONGenerator } from "./generator";
-import { Box } from "@mantine/core";
+import { createCustomBlocks, generateToolbox } from "./utils";
 
 // @ts-ignore
 Blockly.setLocale(locale);
+createCustomBlocks(categories.map((categories) => categories.blocks).flat());
 
 interface BlocklyComponentProps extends Partial<Blockly.Options> {
   initialXml?: string;
-  children: React.ReactNode;
   onChange?: (parsedCode: Object) => void;
 }
 
@@ -28,7 +26,7 @@ export const BlocklyComponent = (props: BlocklyComponentProps) => {
     if (blocklyDiv?.current && !isInitialized && !primaryWorkspace.current) {
       const { initialXml, ...rest } = props;
       primaryWorkspace.current = Blockly.inject(blocklyDiv.current, {
-        toolbox,
+        toolbox: generateToolbox(categories),
         trashcan: false,
         scrollbars: false,
 
@@ -54,10 +52,8 @@ export const BlocklyComponent = (props: BlocklyComponentProps) => {
       });
 
       primaryWorkspace.current.addChangeListener((event: any) => {
-        console.log(event);
         if (event.type === "move" || event.type === "change") {
           var code = JSONGenerator.workspaceToCode(primaryWorkspace.current);
-          console.log(code);
           const parsedCode = JSON.parse(`[${code}]`);
           if (props.onChange) {
             props.onChange(parsedCode);
@@ -73,7 +69,7 @@ export const BlocklyComponent = (props: BlocklyComponentProps) => {
       }
       setInitialized(true);
     }
-  }, [primaryWorkspace, toolbox, blocklyDiv, props]);
+  }, [primaryWorkspace, blocklyDiv, props]);
 
   return (
     <div style={{ position: "relative", height: "100%" }}>
