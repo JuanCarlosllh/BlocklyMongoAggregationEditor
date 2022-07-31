@@ -1,36 +1,50 @@
-import Blockly, { Block } from "blockly";
+import Blockly from "blockly";
 import { JSONGenerator } from "./generator";
-import { BlockTypes, CONNECTION_TYPE, ExtendedBlock } from "./model";
+import {
+  CONNECTION_TYPE,
+  CustomBlock,
+  CustomBlocksCategory,
+  ExtendedBlock,
+} from "./model";
 
-type BlockConnection = [CONNECTION_TYPE[], CONNECTION_TYPE[]];
-export const createCustomBlock = (
-  type: BlockTypes,
-  implementation: {
-    definition: (block: Block) => void;
-    generator: (block: ExtendedBlock) => string;
-    connections?: CONNECTION_TYPE[] | BlockConnection;
-  }
-) => {
-  const { definition, connections, generator } = implementation;
+export const generateToolbox = (
+  CustomBlocksCategories: CustomBlocksCategory[]
+) => ({
+  kind: "categoryToolbox",
+  contents: CustomBlocksCategories.map((category) => ({
+    kind: "category",
+    name: category.name,
+    colour: category.color,
+    contents: category.blocks.map((block) => ({
+      kind: "block",
+      type: block.type,
+    })),
+  })),
+});
 
-  Blockly.Blocks[type] = {
-    init: function () {
-      const block = this as Block;
-      definition(block);
-      if (connections) {
-        if (typeof connections[0] === "string") {
-          block.setPreviousStatement(true, connections as string[]);
-          block.setNextStatement(true, connections as string[]);
+export const createCustomBlocks = (customBlocks: CustomBlock[]) => {
+  customBlocks.forEach((customBlock) => {
+    const { definition, connections, generator, type } = customBlock;
+
+    Blockly.Blocks[type] = {
+      init: function () {
+        const block = this as ExtendedBlock;
+        definition(block);
+        if (connections) {
+          if (typeof connections[0] === "string") {
+            block.setPreviousStatement(true, connections as string[]);
+            block.setNextStatement(true, connections as string[]);
+          } else {
+            block.setPreviousStatement(true, connections[0]);
+            block.setPreviousStatement(true, connections[1]);
+          }
         } else {
-          block.setPreviousStatement(true, connections[0]);
-          block.setPreviousStatement(true, connections[1]);
+          block.setPreviousStatement(false);
+          block.setNextStatement(false);
         }
-      } else {
-        block.setPreviousStatement(false);
-        block.setNextStatement(false);
-      }
-    },
-  };
+      },
+    };
 
-  JSONGenerator[type] = generator;
+    JSONGenerator[type] = generator;
+  });
 };

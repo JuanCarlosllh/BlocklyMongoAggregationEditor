@@ -19,6 +19,7 @@ export const GlobalStyles = () => (
       ".blocklyToolboxCategory": { paddingRight: "16px" },
       ".blocklyTreeRow": {
         borderLeftWidth: "8px !important",
+        cursor: "pointer",
       },
       ".blocklyMainBackground": {
         stroke: "transparent",

@@ -2,7 +2,7 @@ import { Box, SimpleGrid } from "@mantine/core";
 import { useState } from "react";
 import ReactJson from "react-json-view";
 
-import { Block, BlocklyComponent } from "./Blockly";
+import { BlocklyComponent } from "./Blockly/BlocklyComponent";
 
 function App() {
   const [code, setCode] = useState<Object>({});
@@ -25,14 +25,7 @@ function App() {
             wheel: true,
           }}
           onChange={setCode}
-        >
-          <Block type="step_project" />
-          <Block type="step_match" />
-          <Block type="step_group" />
-          <Block type="projection_field" />
-          <Block type="filter_equal" />
-          <Block type="value_number" />
-        </BlocklyComponent>
+        />
       </Box>
       <Box sx={{ borderRadius: "6px", overflow: "hidden" }}>
         <ReactJson
@@ -46,6 +39,7 @@ function App() {
           displayDataTypes={false}
           collapsed={false}
           displayObjectSize={false}
+          displayArrayKey={false}
           theme={{
             base00: "#3B4252",
             base01: "#BF616A",

@@ -1,15 +1,14 @@
 import Blockly, { Block } from "blockly";
-import { ExtendedBlock, BlockTypes } from "./model";
+import { ExtendedBlock } from "./model";
 
 type GeneratorCodeFN = (block: ExtendedBlock) => [string, number] | string;
 
-type NewGenerators = {
-  [key in BlockTypes]: GeneratorCodeFN;
-};
+type NewGenerators = Record<string, GeneratorCodeFN>;
 
 // @ts-ignore
 interface JSONGeneratorInterface extends Blockly.Generator {
   PRECEDENCE: number;
+  ORDER_ATOMIC: number;
   scrub_: () => string;
 }
 
