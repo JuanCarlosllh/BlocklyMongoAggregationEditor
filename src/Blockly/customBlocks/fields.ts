@@ -3,6 +3,8 @@ import { CONNECTION_TYPE } from "../model";
 
 import { createCustomBlock } from "../utils";
 
+export const FIELDS_COLOR = "#b38cac";
+
 createCustomBlock("projection_field", {
   definition: (block) => {
     block
@@ -13,7 +15,7 @@ createCustomBlock("projection_field", {
       .appendField(new Blockly.FieldTextInput(""), "ALIAS");
     block.setPreviousStatement(true, null);
     block.setNextStatement(true, null);
-    block.setColour(285);
+    block.setColour(FIELDS_COLOR);
     block.setTooltip("");
     block.setHelpUrl("");
   },

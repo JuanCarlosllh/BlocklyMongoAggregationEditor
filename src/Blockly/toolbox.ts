@@ -1,10 +1,14 @@
+import { FIELDS_COLOR } from "./customBlocks/fields";
+import { OPERATORS_COLOR } from "./customBlocks/operators";
+import { STEP_COLOR } from "./customBlocks/steps";
+
 export const toolbox = {
   kind: "categoryToolbox",
   contents: [
     {
       kind: "category",
       name: "Steps",
-      colour: 105,
+      colour: STEP_COLOR,
       contents: [
         {
           kind: "block",
@@ -34,7 +38,7 @@ export const toolbox = {
     {
       kind: "category",
       name: "Projection",
-      colour: 285,
+      colour: FIELDS_COLOR,
       contents: [
         {
           kind: "block",
@@ -45,7 +49,7 @@ export const toolbox = {
     {
       kind: "category",
       name: "Operators",
-      colour: 230,
+      colour: OPERATORS_COLOR,
       contents: [
         {
           kind: "label",

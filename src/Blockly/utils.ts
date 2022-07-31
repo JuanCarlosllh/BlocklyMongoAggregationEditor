@@ -17,7 +17,6 @@ export const createCustomBlock = (
     init: function () {
       const block = this as Block;
       definition(block);
-      console.log(type, connections);
       if (connections) {
         if (typeof connections[0] === "string") {
           block.setPreviousStatement(true, connections as string[]);

@@ -8,6 +8,7 @@ import "./generator";
 import "./customBlocks";
 import { toolbox } from "./toolbox";
 import { JSONGenerator } from "./generator";
+import { Box } from "@mantine/core";
 
 // @ts-ignore
 Blockly.setLocale(locale);
@@ -23,23 +24,45 @@ export const BlocklyComponent = (props: BlocklyComponentProps) => {
   const blocklyDiv = useRef<HTMLDivElement>(null);
   let primaryWorkspace = useRef<Blockly.WorkspaceSvg>();
 
-  const generateCode = () => {
-    var code = JSONGenerator.workspaceToCode(primaryWorkspace.current);
-
-    const parsedCode = JSON.parse(`[${code}]`);
-    if (props.onChange) {
-      props.onChange(parsedCode);
-    }
-  };
-
   useEffect(() => {
     if (blocklyDiv?.current && !isInitialized && !primaryWorkspace.current) {
       const { initialXml, ...rest } = props;
       primaryWorkspace.current = Blockly.inject(blocklyDiv.current, {
         toolbox,
+        trashcan: false,
+        scrollbars: false,
+
+        theme: {
+          fontStyle: {
+            family: "Roboto Mono, monospace",
+            size: 11,
+            weight: "bold",
+          },
+          componentStyles: {
+            workspaceBackgroundColour: "#3B4252",
+            toolboxBackgroundColour: "#4C566A",
+            toolboxForegroundColour: "#E5E9F0",
+            flyoutBackgroundColour: "#4C566A",
+            flyoutForegroundColour: "#E5E9F0",
+            scrollbarColour: "#4C566A",
+            insertionMarkerColour: "  #A3BE8C",
+          },
+        },
         sounds: false,
 
         ...(rest as any),
+      });
+
+      primaryWorkspace.current.addChangeListener((event: any) => {
+        console.log(event);
+        if (event.type === "move" || event.type === "change") {
+          var code = JSONGenerator.workspaceToCode(primaryWorkspace.current);
+          console.log(code);
+          const parsedCode = JSON.parse(`[${code}]`);
+          if (props.onChange) {
+            props.onChange(parsedCode);
+          }
+        }
       });
 
       if (initialXml) {
@@ -53,28 +76,18 @@ export const BlocklyComponent = (props: BlocklyComponentProps) => {
   }, [primaryWorkspace, toolbox, blocklyDiv, props]);
 
   return (
-    <div
-      style={{
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-      }}
-    >
-      <button onClick={generateCode}>Convert</button>
-      <div style={{ position: "relative", height: "100%" }}>
-        <div
-          ref={blocklyDiv}
-          id="blocklyDiv"
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
-      </div>
+    <div style={{ position: "relative", height: "100%" }}>
+      <div
+        ref={blocklyDiv}
+        id="blocklyDiv"
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+      />
     </div>
   );
 };

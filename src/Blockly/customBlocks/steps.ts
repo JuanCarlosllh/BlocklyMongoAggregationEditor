@@ -3,13 +3,15 @@ import { JSONGenerator } from "../generator";
 import { CONNECTION_TYPE } from "../model";
 import { createCustomBlock } from "../utils";
 
+export const STEP_COLOR = "#88ab6a";
+
 createCustomBlock("step_project", {
   definition: (block) => {
     block.appendDummyInput().appendField("Fields");
     block
       .appendStatementInput("PROJECTION")
       .setCheck(CONNECTION_TYPE.STEP_FIELDS);
-    block.setColour(105);
+    block.setColour(STEP_COLOR);
   },
   generator: (block) => {
     const statement_members = JSONGenerator.statementToCode(
@@ -27,7 +29,7 @@ createCustomBlock("step_match", {
   definition: (block) => {
     block.appendDummyInput().appendField("Filter");
     block.appendStatementInput("MATCH").setCheck(CONNECTION_TYPE.STEP_MATCH);
-    block.setColour(105);
+    block.setColour(STEP_COLOR);
   },
   generator: (block) => {
     const statement_members = JSONGenerator.statementToCode(block, "MATCH");
@@ -49,7 +51,7 @@ createCustomBlock("step_group", {
       .appendField("aggregate");
     block.setPreviousStatement(true, null);
     block.setNextStatement(true, null);
-    block.setColour(105);
+    block.setColour(STEP_COLOR);
     block.setTooltip("");
     block.setHelpUrl("");
   },
