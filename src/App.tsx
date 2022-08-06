@@ -39,7 +39,6 @@ function App() {
           displayDataTypes={false}
           collapsed={false}
           displayObjectSize={false}
-          displayArrayKey={false}
           theme={{
             base00: "#3B4252",
             base01: "#BF616A",
