@@ -54,7 +54,6 @@ export const BlocklyComponent = (props: BlocklyComponentProps) => {
       primaryWorkspace.current.addChangeListener((event: any) => {
         if (event.type === "move" || event.type === "change") {
           var code = JSONGenerator.workspaceToCode(primaryWorkspace.current);
-          console.log(code);
           const parsedCode = JSON.parse(`[${code}]`);
           if (props.onChange) {
             props.onChange(parsedCode);
